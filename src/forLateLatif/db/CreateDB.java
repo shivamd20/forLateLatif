@@ -15,6 +15,7 @@ public class CreateDB {
 	{
 		CreateDB db=new CreateDB();
 		
+		db.createStudentTable();
 		db.createIssueTable();
 	}
 	public boolean createStudentTable()
