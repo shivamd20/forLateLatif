@@ -1,6 +1,7 @@
 package forLateLatif.db;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,7 +20,7 @@ public class CRUDOperation {
 
 	}
 	
-	public boolean insertInStudentTable(Long edrpNo,String email,Long mobileNo,
+	static public boolean insertInStudentTable(Long edrpNo,String email,Long mobileNo,
 			String name,String sex,int semester,String branch,int noOfBooks)
 	{
 		Connection con=null;
@@ -61,7 +62,7 @@ public class CRUDOperation {
 		}
 	}	
 	
-	public List<String> selectFromStudentTable(String what,String where) throws SQLException
+	static public List<String> selectFromStudentTable(String what,String where) throws SQLException
 	{
 		ArrayList<String> names = new ArrayList<String>();
 			ResultSet rs=selectAllFromStudentTable(what, where);
@@ -76,7 +77,7 @@ public class CRUDOperation {
 		
 	}
 	
-	public ResultSet selectAllFromStudentTable(String what,String where)
+	static public ResultSet selectAllFromStudentTable(String what,String where)
 	{
 		
 		Connection con=null;
@@ -96,8 +97,6 @@ public class CRUDOperation {
 			ResultSet rs=ps.executeQuery();
 			return rs;
 			
-			
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			if(con!=null)
@@ -112,4 +111,41 @@ public class CRUDOperation {
 		return null;
 		
 	}
-}}
+	}	
+	public static void insertIntoIssueTable(String bookname,Date date, Long EDRPNo)
+	{
+				try {
+					Connection con = Contract.getDBConnection();
+					String sql="insert into "+Contract.BookIssued.tableName+
+							" (Bookname,date,issuedby) values(?,?,?)";
+					
+					PreparedStatement ps=con.prepareStatement(sql);
+					ps.setString(1, bookname);
+					ps.setDate(2, date);
+					ps.setLong(3, EDRPNo);
+					
+					ps.execute();
+					
+					
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	}	
+	public static ResultSet getAllIssuedBooks()
+	{
+		try {
+			Connection con = Contract.getDBConnection();
+
+			String sql="select * from "+Contract.BookIssued.tableName+"";
+			
+			PreparedStatement ps=con.prepareStatement(sql);
+			return ps.executeQuery();
+				
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+		
+	}
+}

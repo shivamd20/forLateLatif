@@ -18,6 +18,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -162,9 +163,16 @@ public class IssueBook extends JFrame implements ActionListener{
 
 		studentDetailsPanel.setMaximumSize(new Dimension(500, 500));
 		studentDetailsPanel.setBackground(Color.DARK_GRAY);
+		btnIssueBook.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				issueBook(bookNameTextField.getText(), (String)edrpTextField.getSelectedItem(), new Date(dateChooser.getDate().getTime()));
+			}
+		});
 		btnIssueBook.setBackground(Color.ORANGE);
 		btnIssueBook.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		studentDetailsPanel.add(btnIssueBook);
+		
+		dateChooser.setDate(Calendar.getInstance().getTime());
 	}
 
 	public void setEdrpNo()
@@ -182,6 +190,8 @@ public class IssueBook extends JFrame implements ActionListener{
 		}
 		
 	}
+	
+	
 	
 	ActionListener edrpActionLis=new ActionListener() {
 		
@@ -215,6 +225,11 @@ public class IssueBook extends JFrame implements ActionListener{
 	public static void main(String[] args) {
 		
 				new IssueBook().setVisible(true);
+	}
+
+	private void issueBook(String BookName,String EDRPNo,Date date) {
+		
+		CRUDOperation.insertIntoIssueTable(BookName, date,Long.parseLong(EDRPNo));
 	}
 
 	@Override
